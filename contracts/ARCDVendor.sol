@@ -15,15 +15,15 @@ contract ARCDVendor is Ownable {
     myToken = new StandardToken();
   }
 
-  function setPrices(uint256 newBuyPrice) onlyOwner {
+  function setPrices(uint256 newBuyPrice) public onlyOwner {
     buyPrice = newBuyPrice;
   }
 
-  function setToken(address tokenAddress) onlyOwner {
+  function setToken(address tokenAddress) public onlyOwner {
     myToken = StandardToken(tokenAddress);
   }
 
-  function buy() payable returns (uint amount){
+  function buy() public payable returns (uint amount){
     amount = msg.value / buyPrice;                    // Calculates the amount of tokens attempting to be purchased
     require(myToken.balanceOf(this) >= amount);       // Checks if this contract has enough token to sell
     myToken.transfer(msg.sender, amount);             // Sends the amount of tokens to the buyer

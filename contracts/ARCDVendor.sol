@@ -1,9 +1,10 @@
 pragma solidity ^0.4.18;
 
 import "./zeppelin/token/StandardToken.sol";
+import "./zeppelin/ownership/Ownable.sol";
 import "./zeppelin/math/SafeMath.sol";
 
-contract ARCDVendor {
+contract ARCDVendor is Ownable {
 
   uint256 public buyPrice;
 

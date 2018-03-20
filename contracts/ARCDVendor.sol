@@ -1,8 +1,13 @@
-pragma solidity ^0.4.17;
+pragma solidity ^0.4.18;
+
+import "./zeppelin/token/StandardToken.sol";
+import "./zeppelin/math/SafeMath.sol";
 
 contract ARCDVendor {
 
   uint256 public buyPrice;
+
+  address public constant ARCD_TOKEN_ADDRESS = 0xb581E3a7dB80fBAA821AB39342E9Cbfd2ce33c23;
 
   function setPrices(uint256 newBuyPrice) onlyOwner {
     buyPrice = newBuyPrice;

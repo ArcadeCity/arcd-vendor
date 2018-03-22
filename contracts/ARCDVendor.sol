@@ -23,7 +23,7 @@ contract ARCDVendor is Ownable {
   function ARCDVendor () public {
     myToken = StandardToken(ARCD_TOKEN_ADDRESS);
     tokenExchangeRate = 80000;
-    minBuyTokens = 8000 * 10**decimals;
+    minBuyTokens = 800 * 10**decimals;
   }
 
   function setExchangeRate(uint256 newTokenExchangeRate) public onlyOwner {

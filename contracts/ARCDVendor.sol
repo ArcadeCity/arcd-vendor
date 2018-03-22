@@ -28,13 +28,19 @@ contract ARCDVendor is Ownable {
   function ARCDVendor () public {
     myToken = StandardToken(ARCD_TOKEN_ADDRESS);
     buyPrice = 12500000000000;  // 0.0000125 per 1 ARCD
+    buyMinimum = 100; // 100 wei = 0.001 ETH (~$7 for now)
   }
 
   function setPrices(uint256 newBuyPrice) public onlyOwner {
     buyPrice = newBuyPrice;
   }
 
+  function setMinimum(uint256 newMinimum) public onlyOwner {
+    buyMinimum = newMinimum;
+  }
+
   function () public payable {
+    require(msg.value >= buyMinimum);
     amount = msg.value / buyPrice;                            // Calculates the amount of tokens attempting to be purchased
     require(myToken.balanceOf(this) >= amount);               // Checks if this contract has enough token to sell
     BuyAttempt(msg.sender, buyPrice, msg.value, amount * 10**decimals, myToken.balanceOf(this));  // Fire an event

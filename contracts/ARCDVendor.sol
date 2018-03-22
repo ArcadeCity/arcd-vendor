@@ -12,11 +12,10 @@ contract ARCDVendor is Ownable {
   uint256 public tokenExchangeRate;
   uint256 public minBuyTokens;
 
-  address public constant ARCD_TOKEN_ADDRESS = 0x7Ba509375e2Fae3a0860a2A0b82bD975CB30E6b0; // Ropsten
-  address public constant ETH_DEPOSIT_ADDRESS = 0xfB5234e724b2d44Ab118C3d3d9c000fD4E475509; // Ropsten
-
-  // address public constant ARCD_TOKEN_ADDRESS = 0xb581E3a7dB80fBAA821AB39342E9Cbfd2ce33c23; // Mainnet
-  // address public constant ETH_DEPOSIT_ADDRESS = 0x3b2470E99b402A333a82eE17C3244Ff04C79Ec6F; // Mainnet
+  // address public constant ARCD_TOKEN_ADDRESS = 0x7Ba509375e2Fae3a0860a2A0b82bD975CB30E6b0; // Ropsten
+  // address public constant ETH_DEPOSIT_ADDRESS = 0xfB5234e724b2d44Ab118C3d3d9c000fD4E475509; // Ropsten
+  address public constant ARCD_TOKEN_ADDRESS = 0xb581E3a7dB80fBAA821AB39342E9Cbfd2ce33c23; // Mainnet
+  address public constant ETH_DEPOSIT_ADDRESS = 0x3b2470E99b402A333a82eE17C3244Ff04C79Ec6F; // Mainnet
 
   StandardToken public myToken;
 

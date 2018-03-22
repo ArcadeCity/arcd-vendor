@@ -8,9 +8,6 @@ contract ARCDVendor is Ownable {
 
   using SafeMath for uint256;
 
-  // metadata
-  uint256 public constant decimals = 18;
-
   event BuyAttempt(
     address indexed _from,
     uint256 indexed _buyprice,
@@ -19,10 +16,7 @@ contract ARCDVendor is Ownable {
     uint256 balance
   );
 
-  event TestEvent(
-    address indexed _from
-  );
-
+  uint256 public constant decimals = 18;
   uint256 public amount;
   uint256 public buyPrice;
   StandardToken public myToken;

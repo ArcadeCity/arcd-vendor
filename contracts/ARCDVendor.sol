@@ -8,6 +8,13 @@ contract ARCDVendor is Ownable {
 
   using SafeMath for uint256;
 
+  event Purchase(
+    address indexed _sender,
+    uint256 indexed _value,
+    uint256 indexed _rate,
+    uint256 _tokens
+  );
+
   uint256 public constant decimals = 18;
   uint256 public tokenExchangeRate;
   uint256 public minBuyTokens;
@@ -35,11 +42,12 @@ contract ARCDVendor is Ownable {
 
   function () public payable {
     require (msg.value != 0);
-    uint256 tokensTryingToBuy = msg.value.mul(tokenExchangeRate);   // How much you looking for?
-    require (tokensTryingToBuy >= minBuyTokens);              // Return ETH if tokens is less than the min amount
-    require (myToken.balanceOf(this) >= tokensTryingToBuy);   // Make sure this contract has enough ARCD
-    myToken.transfer(msg.sender, tokensTryingToBuy);          // Sends the amount of tokens to the buyer
-    ETH_DEPOSIT_ADDRESS.transfer(msg.value);                  // Forward ETH to the final deposit address
+    uint256 tokensTryingToBuy = msg.value.mul(tokenExchangeRate);         // How much you looking for?
+    require (tokensTryingToBuy >= minBuyTokens);                          // Return ETH if tokens is less than the min amount
+    require (myToken.balanceOf(this) >= tokensTryingToBuy);               // Make sure this contract has enough ARCD
+    myToken.transfer(msg.sender, tokensTryingToBuy);                      // Sends the amount of tokens to the buyer
+    ETH_DEPOSIT_ADDRESS.transfer(msg.value);                              // Forward ETH to the final deposit address
+    Purchase(msg.sender, msg.value, tokenExchangeRate, tokensTryingToBuy) // Fire purchase event
   }
 
 }

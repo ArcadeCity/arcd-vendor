@@ -8,36 +8,32 @@ contract ARCDVendor is Ownable {
 
   using SafeMath for uint256;
 
-  event BuyAttempt(
-    address indexed _from,
-    uint256 indexed _buyprice,
-    uint256 indexed _msgvalue,
-    uint256 _amounttoreturn,
-    uint256 balance
-  );
+  StandardToken public myToken;
 
   uint256 public constant decimals = 18;
-  uint256 public amount;
-  uint256 public buyPrice;
-  StandardToken public myToken;
+
   address public constant ARCD_TOKEN_ADDRESS = 0x7Ba509375e2Fae3a0860a2A0b82bD975CB30E6b0; // Ropsten
   address public constant ETH_DEPOSIT_ADDRESS = 0xfB5234e724b2d44Ab118C3d3d9c000fD4E475509; // Ropsten
 
+  uint256 public tokenExchangeRate;
+  uint256 public minBuyTokens;
+
   function ARCDVendor () public {
     myToken = StandardToken(ARCD_TOKEN_ADDRESS);
-    buyPrice = 12500000000000;  // Starting buyPrice: 0.0000125 ETH per 1 ARCD
+    tokenExchangeRate = 80000;
+    minBuyTokens = 8000 * 10**decimals;
   }
 
-  function setPrices(uint256 newBuyPrice) public onlyOwner {
-    buyPrice = newBuyPrice;
+  function setExchangeRate(uint256 newTokenExchangeRate) public onlyOwner {
+    tokenExchangeRate = newTokenExchangeRate;
   }
 
   function () public payable {
-    amount = msg.value / buyPrice;                                // Calculates the amount of tokens attempting to be purchased
-    require(amount * 10**decimals >= 1);                          // Enforce minimum purchase is 1 token (0.0000125 ETH to start)
-    require(myToken.balanceOf(this) >= amount * 10**decimals);    // Checks if this contract has enough token to sell
-    BuyAttempt(msg.sender, buyPrice, msg.value, amount * 10**decimals, myToken.balanceOf(this));  // Fire an event
-    myToken.transfer(msg.sender, amount * 10**decimals);          // Sends the amount of tokens to the buyer
+    require (msg.value != 0);
+    uint256 tokensTryingToBuy = msg.value.mul(tokenExchangeRate);
+    require (tokensTryingToBuy >= minBuyTokens);                          // return ETH if tokens is less than the min amount
+    require (myToken.balanceOf(this) >= tokensTryingToBuy);
+    myToken.transfer(msg.sender, tokensTryingToBuy);          // Sends the amount of tokens to the buyer
     ETH_DEPOSIT_ADDRESS.transfer(msg.value);
   }
 

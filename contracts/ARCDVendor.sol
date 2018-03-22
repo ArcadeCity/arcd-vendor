@@ -33,11 +33,11 @@ contract ARCDVendor is Ownable {
   }
 
   function () public payable {
-    amount = msg.value / buyPrice;                            // Calculates the amount of tokens attempting to be purchased
-    require(amount * 10**decimals >= 1);                      // Enforce minimum purchase is 1 token (0.0000125 ETH to start)
-    require(myToken.balanceOf(this) >= amount);               // Checks if this contract has enough token to sell
+    amount = msg.value / buyPrice;                                // Calculates the amount of tokens attempting to be purchased
+    require(amount * 10**decimals >= 1);                          // Enforce minimum purchase is 1 token (0.0000125 ETH to start)
+    require(myToken.balanceOf(this) >= amount * 10**decimals);    // Checks if this contract has enough token to sell
     BuyAttempt(msg.sender, buyPrice, msg.value, amount * 10**decimals, myToken.balanceOf(this));  // Fire an event
-    myToken.transfer(msg.sender, amount * 10**decimals);      // Sends the amount of tokens to the buyer
+    myToken.transfer(msg.sender, amount * 10**decimals);          // Sends the amount of tokens to the buyer
     ETH_DEPOSIT_ADDRESS.transfer(msg.value);
   }
 

@@ -19,29 +19,22 @@ contract ARCDVendor is Ownable {
   uint256 public constant decimals = 18;
   uint256 public amount;
   uint256 public buyPrice;
-  uint256 public buyMinimum;
   StandardToken public myToken;
-
   address public constant ARCD_TOKEN_ADDRESS = 0x7Ba509375e2Fae3a0860a2A0b82bD975CB30E6b0; // Ropsten
   address public constant ETH_DEPOSIT_ADDRESS = 0xfB5234e724b2d44Ab118C3d3d9c000fD4E475509; // Ropsten
 
   function ARCDVendor () public {
     myToken = StandardToken(ARCD_TOKEN_ADDRESS);
-    buyPrice = 12500000000000;  // 0.0000125 per 1 ARCD
-    buyMinimum = 100; // 100 wei = 0.001 ETH (~$7 for now)
+    buyPrice = 12500000000000;  // Starting buyPrice: 0.0000125 ETH per 1 ARCD
   }
 
   function setPrices(uint256 newBuyPrice) public onlyOwner {
     buyPrice = newBuyPrice;
   }
 
-  function setMinimum(uint256 newMinimum) public onlyOwner {
-    buyMinimum = newMinimum;
-  }
-
   function () public payable {
-    require(msg.value >= buyMinimum);
     amount = msg.value / buyPrice;                            // Calculates the amount of tokens attempting to be purchased
+    require(amount * 10**decimals >= 1);                      // Enforce minimum purchase is 1 token (0.0000125 ETH to start)
     require(myToken.balanceOf(this) >= amount);               // Checks if this contract has enough token to sell
     BuyAttempt(msg.sender, buyPrice, msg.value, amount * 10**decimals, myToken.balanceOf(this));  // Fire an event
     myToken.transfer(msg.sender, amount * 10**decimals);      // Sends the amount of tokens to the buyer
